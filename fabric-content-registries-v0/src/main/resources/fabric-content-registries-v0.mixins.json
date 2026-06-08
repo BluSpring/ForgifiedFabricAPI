@@ -8,11 +8,12 @@
   "mixins": [
     "AxeItemAccessor",
     "AxeItemMixin",
+    "BaseRegistryMixin",
     "BlockBehaviourAccessor",
     "BlockBehaviourBlockStateBaseMixin",
+    "DataMapHooksMixin",
     "DecoratedPotPatternsMixin",
     "FireBlockMixin",
-    "FuelValuesMixin",
     "GiveGiftToHeroAccessor",
     "GiveGiftToHeroMixin",
     "HoeItemAccessor",
