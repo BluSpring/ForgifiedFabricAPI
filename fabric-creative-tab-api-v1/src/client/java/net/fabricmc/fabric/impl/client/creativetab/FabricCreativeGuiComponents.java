@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/*
 package net.fabricmc.fabric.impl.client.creativetab;
 
 import java.util.Set;
@@ -89,3 +90,4 @@ public class FabricCreativeGuiComponents {
 		}
 	}
 }
+ */
