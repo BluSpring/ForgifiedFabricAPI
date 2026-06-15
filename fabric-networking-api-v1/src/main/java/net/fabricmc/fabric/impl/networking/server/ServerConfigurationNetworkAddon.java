@@ -40,7 +40,6 @@ import net.fabricmc.fabric.impl.networking.AbstractChanneledNetworkAddon;
 import net.fabricmc.fabric.impl.networking.ChannelInfoHolder;
 import net.fabricmc.fabric.impl.networking.NetworkingImpl;
 import net.fabricmc.fabric.impl.networking.RegistrationPayload;
-import net.fabricmc.fabric.mixin.networking.accessor.ServerCommonPacketListenerImplAccessor;
 
 public final class ServerConfigurationNetworkAddon extends AbstractChanneledNetworkAddon<ServerConfigurationNetworking.ConfigurationPacketHandler<?>> {
 	private final ServerConfigurationPacketListenerImpl listener;
@@ -52,7 +51,7 @@ public final class ServerConfigurationNetworkAddon extends AbstractChanneledNetw
 	private boolean isReconfiguring = false;
 
 	public ServerConfigurationNetworkAddon(ServerConfigurationPacketListenerImpl listener, MinecraftServer server) {
-		super(ServerNetworkingImpl.CONFIGURATION, ((ServerCommonPacketListenerImplAccessor) listener).getConnection(), "ServerConfigurationNetworkAddon for " + listener.getOwner().name());
+		super(ServerNetworkingImpl.CONFIGURATION, listener.getConnection(), "ServerConfigurationNetworkAddon for " + listener.getOwner().name());
 		this.listener = listener;
 		this.server = server;
 		this.context = new ContextImpl(server, listener, this);
@@ -159,7 +158,7 @@ public final class ServerConfigurationNetworkAddon extends AbstractChanneledNetw
 	protected void handleRegistration(Identifier channelName) {
 		// If we can already send packets, immediately send the register packet for this channel
 		if (this.registerState != RegisterState.NOT_SENT) {
-			RegistrationPayload registrationPayload = this.createRegistrationPayload(RegistrationPayload.REGISTER, Collections.singleton(channelName));
+			CustomPacketPayload registrationPayload = this.createRegistrationPayload(RegistrationPayload.REGISTER, Collections.singleton(channelName));
 
 			if (registrationPayload != null) {
 				this.sendPacket(registrationPayload);
@@ -171,7 +170,7 @@ public final class ServerConfigurationNetworkAddon extends AbstractChanneledNetw
 	protected void handleUnregistration(Identifier channelName) {
 		// If we can already send packets, immediately send the unregister packet for this channel
 		if (this.registerState != RegisterState.NOT_SENT) {
-			RegistrationPayload registrationPayload = this.createRegistrationPayload(RegistrationPayload.UNREGISTER, Collections.singleton(channelName));
+			CustomPacketPayload registrationPayload = this.createRegistrationPayload(RegistrationPayload.UNREGISTER, Collections.singleton(channelName));
 
 			if (registrationPayload != null) {
 				this.sendPacket(registrationPayload);
@@ -214,7 +213,7 @@ public final class ServerConfigurationNetworkAddon extends AbstractChanneledNetw
 	}
 
 	public ChannelInfoHolder getChannelInfoHolder() {
-		return (ChannelInfoHolder) ((ServerCommonPacketListenerImplAccessor) listener).getConnection();
+		return (ChannelInfoHolder) listener.getConnection();
 	}
 
 	private record ContextImpl(MinecraftServer server, ServerConfigurationPacketListenerImpl packetListener, PacketSender responseSender) implements ServerConfigurationNetworking.Context {

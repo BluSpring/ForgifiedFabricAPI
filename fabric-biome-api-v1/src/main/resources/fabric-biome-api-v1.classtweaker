@@ -3,8 +3,6 @@ classTweaker	v1	official
 accessible	class	net/minecraft/world/level/biome/Biome$ClimateSettings
 # Top-Level Biome Fields Access
 
-accessible	field	net/minecraft/world/level/biome/Biome	climateSettings	Lnet/minecraft/world/level/biome/Biome$ClimateSettings;
-mutable	field	net/minecraft/world/level/biome/Biome	climateSettings	Lnet/minecraft/world/level/biome/Biome$ClimateSettings;
 accessible	field	net/minecraft/world/level/biome/Biome	attributes	Lnet/minecraft/world/attribute/EnvironmentAttributeMap;
 mutable	field	net/minecraft/world/level/biome/Biome	attributes	Lnet/minecraft/world/attribute/EnvironmentAttributeMap;
 accessible	field	net/minecraft/world/level/biome/Biome	generationSettings	Lnet/minecraft/world/level/biome/BiomeGenerationSettings;

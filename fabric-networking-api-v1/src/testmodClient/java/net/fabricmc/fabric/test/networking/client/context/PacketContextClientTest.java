@@ -16,12 +16,9 @@
 
 package net.fabricmc.fabric.test.networking.client.context;
 
-import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
-
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.test.networking.context.PacketContextTest;
 
 public final class PacketContextClientTest implements ClientModInitializer {
 	@Override
@@ -29,11 +26,11 @@ public final class PacketContextClientTest implements ClientModInitializer {
 		// Sending context checking packets from client to server
 
 		ClientConfigurationConnectionEvents.COMPLETE.register((listener, client) -> {
-			listener.send(new ServerboundCustomPayloadPacket(new PacketContextTest.ContextCheckPacket("Client Configuration")));
+//			listener.send(new ServerboundCustomPayloadPacket(new PacketContextTest.ContextCheckPacket("Client Configuration")));
 		});
 
 		ClientPlayConnectionEvents.INIT.register((listener, client) -> {
-			listener.send(new ServerboundCustomPayloadPacket(new PacketContextTest.ContextCheckPacket("Client Play")));
+//			listener.send(new ServerboundCustomPayloadPacket(new PacketContextTest.ContextCheckPacket("Client Play")));
 		});
 	}
 }
