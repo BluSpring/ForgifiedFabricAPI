@@ -6,6 +6,7 @@
     "ClientCommonPacketListenerImplMixin",
     "ClientConfigurationPacketListenerImplMixin",
     "ClientHandshakePacketListenerImplMixin",
+    "ClientNetworkRegistryMixin",
     "ClientPacketListenerMixin",
     "LocalPlayerMixin",
     "accessor.ClientConfigurationPacketListenerImplAccessor",

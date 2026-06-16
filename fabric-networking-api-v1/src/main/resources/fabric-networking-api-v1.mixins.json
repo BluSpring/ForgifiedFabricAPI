@@ -12,6 +12,7 @@
     "DebugConfigCommandMixin",
     "FriendlyByteBufMixin",
     "IdDispatchCodecMixin",
+    "NetworkFiltersMixin",
     "NetworkRegistryMixin",
     "PacketDecoderMixin",
     "PacketEncoderMixin",
