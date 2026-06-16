@@ -9,6 +9,7 @@
     "ClientNetworkRegistryMixin",
     "ClientPacketListenerMixin",
     "LocalPlayerMixin",
+    "NetworkRegistryClientMixin",
     "accessor.ClientConfigurationPacketListenerImplAccessor",
     "accessor.ClientHandshakePacketListenerImplAccessor",
     "accessor.ConnectScreenAccessor",
