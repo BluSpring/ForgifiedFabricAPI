@@ -32,17 +32,11 @@ import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import org.spongepowered.asm.mixin.Final;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.GuiRenderer;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
@@ -54,53 +48,7 @@ import net.fabricmc.fabric.impl.client.rendering.PictureInPictureRendererPool;
 import net.fabricmc.fabric.impl.client.rendering.PictureInPictureRendererRegistryImpl;
 
 @Mixin(GuiRenderer.class)
-abstract class GuiRendererMixin implements GuiRendererExtensions {
-	@Shadow
-	@Final
-	@Mutable
-	private Map<Class<? extends PictureInPictureRenderState>, PictureInPictureRenderer<?>> pictureInPictureRenderers;
-
-	@Unique
-	private boolean hasFabricInitialized = false;
-	@Unique
-	private final Map<Class<? extends PictureInPictureRenderState>, PictureInPictureRendererPool<?>> pipRendererPools = new HashMap<>();
-
-	@Inject(method = "<init>", at = @At(value = "RETURN"))
-	private void mutableSpecialElementRenderers(GuiRenderState renderState, FeatureRenderDispatcher featureRenderDispatcher, List<PictureInPictureRenderer<?>> pictureInPictureRenderers, CallbackInfo ci) {
-		this.pictureInPictureRenderers = new IdentityHashMap<>(this.pictureInPictureRenderers);
-	}
-
-	@Override
-	public void fabric_onReady() {
-		PictureInPictureRendererRegistryImpl.onReady(Minecraft.getInstance(), this.pictureInPictureRenderers);
-		this.hasFabricInitialized = true;
-	}
-
-	@Inject(method = "preparePictureInPicture", at = @At("HEAD"))
-	private void prePrepareSpecialElements(CallbackInfo ci) {
-		pipRendererPools.values().forEach(PictureInPictureRendererPool::newFrame);
-	}
-
-	@Inject(method = "preparePictureInPicture", at = @At("RETURN"))
-	private void postPrepareSpecialElements(CallbackInfo ci) {
-		pipRendererPools.values().forEach(PictureInPictureRendererPool::cleanUpUnusedRenderers);
-	}
-
-	@ModifyVariable(method = "preparePictureInPictureState", at = @At("STORE"), name = "renderer")
-	private <T extends PictureInPictureRenderState> PictureInPictureRenderer<T> substituteSpecialElementRenderer(PictureInPictureRenderer<T> original, T elementState) {
-		if (original == null || !hasFabricInitialized) {
-			return original;
-		}
-
-		PictureInPictureRendererPool<T> rendererPool = (PictureInPictureRendererPool<T>) pipRendererPools.computeIfAbsent(original.getRenderStateClass(), k -> new PictureInPictureRendererPool<>());
-		return rendererPool.substitute(original, elementState, Minecraft.getInstance());
-	}
-
-	@Inject(method = "close", at = @At("RETURN"))
-	private void closeRendererPools(CallbackInfo ci) {
-		pipRendererPools.values().forEach(PictureInPictureRendererPool::close);
-	}
-
+abstract class GuiRendererMixin {
 	@WrapOperation(
 			method = "executeDraw",
 			at = @At(
