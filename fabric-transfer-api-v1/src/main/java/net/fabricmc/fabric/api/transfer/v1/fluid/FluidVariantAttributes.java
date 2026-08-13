@@ -40,7 +40,7 @@ import net.fabricmc.fabric.impl.transfer.TransferApiImpl;
  */
 public final class FluidVariantAttributes {
 	private static final ApiProviderMap<Fluid, FluidVariantAttributeHandler> HANDLERS = ApiProviderMap.create();
-	private static final FluidVariantAttributeHandler DEFAULT_HANDLER = new FluidVariantAttributeHandler() { };
+	public static final FluidVariantAttributeHandler DEFAULT_HANDLER = new FluidVariantAttributeHandler() { };
 	private static volatile boolean coloredVanillaFluidNames = false;
 
 	private FluidVariantAttributes() {
@@ -50,6 +50,10 @@ public final class FluidVariantAttributes {
 	 * Register an attribute handler for the passed fluid.
 	 */
 	public static void register(Fluid fluid, FluidVariantAttributeHandler handler) {
+		registerInternal(fluid, handler);
+	}
+
+	private static void registerInternal(Fluid fluid, FluidVariantAttributeHandler handler) {
 		if (HANDLERS.putIfAbsent(fluid, handler) != null) {
 			throw new IllegalArgumentException("Duplicate handler registration for fluid " + fluid);
 		}
