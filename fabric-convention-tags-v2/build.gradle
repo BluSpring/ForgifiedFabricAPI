@@ -13,6 +13,7 @@ testDependencies(project, [
 	':fabric-lifecycle-events-v1',
 ])
 
+/*
 fabricApi {
 	configureDataGeneration {
 		outputDirectory = file("src/generated/resources")
@@ -36,3 +37,4 @@ loom {
 }
 
 generateResources.dependsOn runDatagen
+ */

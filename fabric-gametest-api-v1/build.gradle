@@ -3,6 +3,7 @@ version = getSubprojectVersion(project)
 loom {
 	accessWidenerPath = file("src/main/resources/fabric-gametest-api-v1.classtweaker")
 
+	/*
 	runs {
 		testmodClient {
 			client()
@@ -13,6 +14,7 @@ loom {
 			source sourceSets.testmodClient
 		}
 	}
+	 */
 }
 
 moduleDependencies(project, [

@@ -125,7 +125,7 @@ abstract class GenerateForgeModEntrypoint : DefaultTask() {
             }
         """.trimIndent()
 
-        destFile.writeText(template)
+//        destFile.writeText(template)
     }
 
     private fun packageNameForEntryPoint(modid: String, includeVersion: Boolean): String {

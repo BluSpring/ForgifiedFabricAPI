@@ -15,12 +15,12 @@ plugins {
 rootProject.name = "forgified-fabric-api"
 
 gradle.beforeProject {
-	def localPropertiesFile = rootDir.resolve("ffapi.gradle.properties")
+	def localPropertiesFile = rootDir.toPath().resolve("ffapi.gradle.properties").toFile()
 	if (localPropertiesFile.exists()) {
-		def localProperties = java.util.Properties()
-		localProperties.load(localPropertiesFile.inputStream())
+		def localProperties = new java.util.Properties()
+		localProperties.load(localPropertiesFile.newInputStream())
 		localProperties.forEach { k, v ->
-			if (k is String) project.extra[k] = v
+			if (k instanceof String) it.project.ext[k] = v
 		}
 	}
 }
@@ -83,5 +83,6 @@ include 'fabric-sound-api-v1'
 include 'fabric-tag-api-v1'
 include 'fabric-transfer-api-v1'
 include 'fabric-transitive-access-wideners-v1'
+include("internal:ffapi-fluid-types")
 include 'deprecated'
 include 'deprecated:fabric-resource-loader-v0'
