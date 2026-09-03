@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.neoforged.neoforge.common.world.ClimateSettingsBuilder;
+import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jspecify.annotations.Nullable;
 
@@ -61,15 +63,17 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
 public class BiomeModificationContextImpl implements BiomeModificationContext {
 	private final RegistryAccess registries;
 	private final Biome biome;
+	private final ModifiableBiomeInfo.BiomeInfo.Builder builder;
 	private final WeatherContext weather;
 	private final AttributesContext attributes;
 	private final EffectsContext effects;
 	private final GenerationSettingsContextImpl generationSettings;
 	private final SpawnSettingsContextImpl spawnSettings;
 
-	public BiomeModificationContextImpl(RegistryAccess registries, Biome biome) {
+	public BiomeModificationContextImpl(RegistryAccess registries, Biome biome, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
 		this.registries = registries;
 		this.biome = biome;
+		this.builder = builder;
 		this.weather = new WeatherContextImpl();
 		this.attributes = new AttributesContextImpl();
 		this.effects = new EffectsContextImpl();
@@ -115,24 +119,26 @@ public class BiomeModificationContextImpl implements BiomeModificationContext {
 	}
 
 	private class WeatherContextImpl implements WeatherContext {
+		ClimateSettingsBuilder climateSettings = builder.getClimateSettings();
+
 		@Override
 		public void setPrecipitation(boolean hasPrecipitation) {
-			biome.climateSettings = new Biome.ClimateSettings(hasPrecipitation, biome.climateSettings.temperature(), biome.climateSettings.temperatureModifier(), biome.climateSettings.downfall());
+			climateSettings.setHasPrecipitation(hasPrecipitation);
 		}
 
 		@Override
 		public void setTemperature(float temperature) {
-			biome.climateSettings = new Biome.ClimateSettings(biome.climateSettings.hasPrecipitation(), temperature, biome.climateSettings.temperatureModifier(), biome.climateSettings.downfall());
+			climateSettings.setTemperature(temperature);
 		}
 
 		@Override
 		public void setTemperatureModifier(Biome.TemperatureModifier temperatureModifier) {
-			biome.climateSettings = new Biome.ClimateSettings(biome.climateSettings.hasPrecipitation(), biome.climateSettings.temperature(), Objects.requireNonNull(temperatureModifier), biome.climateSettings.downfall());
+			climateSettings.setTemperatureModifier(temperatureModifier);
 		}
 
 		@Override
 		public void setDownfall(float downfall) {
-			biome.climateSettings = new Biome.ClimateSettings(biome.climateSettings.hasPrecipitation(), biome.climateSettings.temperature(), biome.climateSettings.temperatureModifier(), downfall);
+			climateSettings.setDownfall(downfall);
 		}
 	}
 

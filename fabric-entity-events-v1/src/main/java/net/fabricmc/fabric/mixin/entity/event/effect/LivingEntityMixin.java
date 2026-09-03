@@ -17,12 +17,9 @@
 package net.fabricmc.fabric.mixin.entity.event.effect;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -80,7 +77,7 @@ public abstract class LivingEntityMixin extends Entity {
 			method = "forceAddEffect",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/world/entity/LivingEntity;canBeAffected(Lnet/minecraft/world/effect/MobEffectInstance;)Z",
+					target = "Lnet/neoforged/neoforge/common/CommonHooks;canMobEffectBeApplied(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z",
 					shift = At.Shift.AFTER
 			)
 	)
@@ -104,6 +101,7 @@ public abstract class LivingEntityMixin extends Entity {
 		ServerMobEffectEvents.AFTER_ADD.invoker().afterAdd(effectInstance, this.self(), MobEffectUtil.getCommandContext());
 	}
 
+	/* // Neo event hook exists
 	@WrapOperation(
 			method = "removeAllEffects",
 			at = @At(
@@ -130,6 +128,7 @@ public abstract class LivingEntityMixin extends Entity {
 			}
 		}
 	}
+	 */
 
 	@WrapMethod(method = "removeEffect")
 	private boolean allowRemoveEffect(Holder<MobEffect> holder, Operation<Boolean> original) {
@@ -191,8 +190,8 @@ public abstract class LivingEntityMixin extends Entity {
 	@Inject(
 			method = "removeAllEffects",
 			at = @At(
-					value = "INVOKE",
-					target = "Lcom/google/common/collect/Maps;newHashMap(Ljava/util/Map;)Ljava/util/HashMap;"
+					value = "NEW",
+					target = "Ljava/util/HashMap;"
 			)
 	)
 	private void beforeRemoveAllEffects(CallbackInfoReturnable<Boolean> cir) {

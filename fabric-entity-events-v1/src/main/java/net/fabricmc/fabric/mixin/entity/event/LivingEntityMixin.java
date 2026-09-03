@@ -18,6 +18,7 @@ package net.fabricmc.fabric.mixin.entity.event;
 
 import java.util.Optional;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -27,6 +28,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -39,9 +41,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.CollisionGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -117,9 +117,8 @@ abstract class LivingEntityMixin {
 		}
 	}
 
-	@WrapOperation(method = "getBedOrientation", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/BedBlock;getBedOrientation(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/Direction;"))
-	private Direction onGetSleepingDirection(BlockGetter level, BlockPos sleepingPos, Operation<Direction> operation) {
-		final Direction sleepingDirection = operation.call(level, sleepingPos);
+	@ModifyReturnValue(method = "getBedOrientation", at = @At("TAIL"))
+	private Direction onGetSleepingDirection(Direction sleepingDirection, @Local BlockPos sleepingPos) {
 		return EntitySleepEvents.MODIFY_SLEEPING_DIRECTION.invoker().modifySleepDirection((LivingEntity) (Object) this, sleepingPos, sleepingDirection);
 	}
 
@@ -136,23 +135,9 @@ abstract class LivingEntityMixin {
 
 	// The injector is shared because lambda$stopSleeping$23 and sleep share much of the structure here.
 	@Dynamic("lambda$stopSleeping$0: Synthetic lambda body for Optional.ifPresent in stopSleeping")
-	@Redirect(method = {"lambda$stopSleeping$0", "startSleeping"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z"))
-	private boolean setOccupiedState(Level level, BlockPos pos, BlockState state, int flags) {
-		// This might have been replaced by a red bed above, so we get it again.
-		// Note that we *need* to replace it so the state.with(OCCUPIED, ...) call doesn't crash
-		// when the bed doesn't have the property.
-		BlockState originalState = level.getBlockState(pos);
-		boolean occupied = state.getValue(BedBlock.OCCUPIED);
-
-		if (EntitySleepEvents.SET_BED_OCCUPATION_STATE.invoker().setBedOccupationState((LivingEntity) (Object) this, pos, originalState, occupied)) {
-			return true;
-		} else if (originalState.hasProperty(BedBlock.OCCUPIED)) {
-			// This check is widened from (instanceof BedBlock) to a property check to allow modded blocks
-			// that don't use the event.
-			return level.setBlock(pos, originalState.setValue(BedBlock.OCCUPIED, occupied), flags);
-		} else {
-			return false;
-		}
+	@ModifyArg(method = {"lambda$stopSleeping$0", "startSleeping"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;setBedOccupied(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/LivingEntity;Z)V"))
+	private boolean setOccupiedState(boolean occupied, @Local BlockPos pos, @Local BlockState originalState) {
+		return occupied || EntitySleepEvents.SET_BED_OCCUPATION_STATE.invoker().setBedOccupationState((LivingEntity) (Object) this, pos, originalState, occupied);
 	}
 
 	@Dynamic("lambda$stopSleeping$0: Synthetic lambda body for Optional.ifPresent in stopSleeping")

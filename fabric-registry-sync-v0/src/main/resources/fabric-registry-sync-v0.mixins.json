@@ -4,21 +4,20 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "BlocksMixin",
-    "BootstrapMixin",
-    "SerializableChunkDataMixin",
-    "DebugLevelSourceAccessor",
-    "RegistryPatchGeneratorMixin",
-    "IdMapperMixin",
-    "MainMixin",
     "BuiltInRegistriesAccessor",
     "BuiltInRegistriesMixin",
+    "DebugLevelSourceAccessor",
+    "IdMapperMixin",
+    "MainMixin",
+    "MappedRegistryAccessor",
+    "MappedRegistryMixin",
     "RegistriesMixin",
     "RegistryDataLoaderMixin",
     "RegistryMixin",
-    "WorldLoaderMixin",
+    "RegistryPatchGeneratorMixin",
     "RegistrySynchronizationMixin",
-    "MappedRegistryAccessor",
-    "MappedRegistryMixin"
+    "SerializableChunkDataMixin",
+    "WorldLoaderMixin"
   ],
   "injectors": {
     "defaultRequire": 1
