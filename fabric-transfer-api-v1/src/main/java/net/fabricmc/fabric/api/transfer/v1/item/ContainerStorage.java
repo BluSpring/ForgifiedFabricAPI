@@ -32,7 +32,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.fabricmc.fabric.api.transfer.v1.storage.SlottedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
-import net.fabricmc.fabric.impl.transfer.item.ContainerStorageImpl;
+import net.fabricmc.fabric.impl.transfer.compat.FabricContainerStorage;
 
 /**
  * An implementation of {@code Storage<ItemVariant>} for vanilla's {@link Container}, {@link WorldlyContainer} and {@link Inventory}.
@@ -59,7 +59,7 @@ public interface ContainerStorage extends SlottedStorage<ItemVariant> {
 	 */
 	static ContainerStorage of(Container container, @Nullable Direction direction) {
 		Objects.requireNonNull(container, "Null container is not supported.");
-		return ContainerStorageImpl.of(container, direction);
+		return FabricContainerStorage.of(container, direction);
 	}
 
 	/**

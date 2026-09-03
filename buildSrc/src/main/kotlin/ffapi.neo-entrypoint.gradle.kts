@@ -1,5 +1,6 @@
 import net.fabricmc.loader.impl.metadata.*
 import kotlin.io.path.createDirectories
+import kotlin.io.path.writeText
 
 val versionMc: String by rootProject
 val versionNeoForge: String by rootProject
@@ -125,7 +126,7 @@ abstract class GenerateForgeModEntrypoint : DefaultTask() {
             }
         """.trimIndent()
 
-//        destFile.writeText(template)
+        destFile.writeText(template)
     }
 
     private fun packageNameForEntryPoint(modid: String, includeVersion: Boolean): String {
