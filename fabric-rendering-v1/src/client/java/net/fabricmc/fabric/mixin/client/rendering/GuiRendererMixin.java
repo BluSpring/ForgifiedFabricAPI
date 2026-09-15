@@ -16,11 +16,6 @@
 
 package net.fabricmc.fabric.mixin.client.rendering;
 
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -31,21 +26,11 @@ import com.mojang.blaze3d.buffers.GpuBuffer;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
-import org.spongepowered.asm.mixin.Final;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
 
 import net.minecraft.client.gui.render.GuiRenderer;
-import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
-import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
-import net.minecraft.client.renderer.state.gui.GuiRenderState;
-import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
-
-import net.fabricmc.fabric.impl.client.rendering.GuiRendererExtensions;
-import net.fabricmc.fabric.impl.client.rendering.PictureInPictureRendererPool;
-import net.fabricmc.fabric.impl.client.rendering.PictureInPictureRendererRegistryImpl;
 
 @Mixin(GuiRenderer.class)
 abstract class GuiRendererMixin {

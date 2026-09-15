@@ -26,12 +26,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import net.fabricmc.fabric.mixin.client.rendering.GuiAccessor;
-
-import net.fabricmc.fabric.mixin.client.rendering.GuiLayerManagerAccessor;
-
-import net.minecraft.client.Minecraft;
-
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.GuiLayer;
 import net.neoforged.neoforge.client.gui.GuiLayerManager;
@@ -41,11 +35,14 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.jetbrains.annotations.VisibleForTesting;
 
 import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.fabric.mixin.client.rendering.GuiLayerManagerAccessor;
+import net.fabricmc.fabric.mixin.client.rendering.HudAccessor;
 
 public class HudElementRegistryImpl {
 	@VisibleForTesting
@@ -97,7 +94,7 @@ public class HudElementRegistryImpl {
 	
 	private static void addLateLayer(Consumer<RegisterGuiLayersEvent> consumer) {
 		if (registered) {
-			GuiLayerManager manager = ((GuiAccessor) Minecraft.getInstance().gui).fabric$getLayerManager();
+			GuiLayerManager manager = ((HudAccessor) Minecraft.getInstance().gui.hud).fabric$getLayerManager();
 			List<NamedLayer> layers = ((GuiLayerManagerAccessor) manager).getLayers();
 
 			RegisterGuiLayersEvent event = new RegisterGuiLayersEvent(layers);

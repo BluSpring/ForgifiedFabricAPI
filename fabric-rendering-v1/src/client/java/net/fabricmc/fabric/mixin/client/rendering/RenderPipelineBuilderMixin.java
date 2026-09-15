@@ -29,11 +29,8 @@ import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.PolygonMode;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import org.jspecify.annotations.Nullable;
-
-import net.fabricmc.fabric.api.client.rendering.v1.FabricRenderPipeline.Snippet;
-
 import net.neoforged.neoforge.client.stencil.StencilTest;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -44,6 +41,7 @@ import net.minecraft.client.renderer.ShaderDefines;
 import net.minecraft.resources.Identifier;
 
 import net.fabricmc.fabric.api.client.rendering.v1.FabricRenderPipeline;
+import net.fabricmc.fabric.api.client.rendering.v1.FabricRenderPipeline.Snippet;
 import net.fabricmc.fabric.impl.client.rendering.FabricRenderPipelineImpl;
 import net.fabricmc.fabric.impl.client.rendering.FabricRenderPipelineInternals;
 
@@ -94,7 +92,7 @@ class RenderPipelineBuilderMixin implements FabricRenderPipeline.Builder {
 			Optional<StencilTest> stencilTest,
 			Operation<RenderPipeline.Snippet> original
 	) {
-		return FabricRenderPipelineInternals.withSnippetUsePipelineVertexFormatForGui(() -> original.call(vertexShader, fragmentShader, shaderDefines, samplers, uniforms, colorTargetState, depthStencilState, polygonMode, cull, vertexFormatPerBuffer, vertexFormatMode, stencilTest), usePipelineDrawModeForGui);
+		return FabricRenderPipelineInternals.withSnippetUsePipelineVertexFormatForGui(() -> original.call(vertexShader, fragmentShader, shaderDefines, bindGroupLayouts, colorTargetStates, activeColorTargetStateCount, depthStencilState, polygonMode, cull, vertexFormatPerBuffer, vertexFormatMode, stencilTest), usePipelineDrawModeForGui);
 	}
 
 	@ModifyReturnValue(
