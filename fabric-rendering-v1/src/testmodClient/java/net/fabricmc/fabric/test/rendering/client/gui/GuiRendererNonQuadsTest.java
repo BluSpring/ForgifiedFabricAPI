@@ -75,7 +75,7 @@ public class GuiRendererNonQuadsTest implements ClientModInitializer {
 		static {
 			RenderPipeline.Builder builder = RenderPipeline.builder(RenderPipelines.GUI_SNIPPET)
 					.withLocation(Identifier.fromNamespaceAndPath("test", "gui_renderer_non_quads_test"))
-					.withPrimitiveTopology(PrimitiveTopology.TRIANGLE_FAN)
+					.withPrimitiveTopology(PrimitiveTopology.TRIANGLE_FAN);
 			((FabricRenderPipeline.Builder) builder).withUsePipelineDrawModeForGui(true);
 			PIPELINE = builder.build();
 		}

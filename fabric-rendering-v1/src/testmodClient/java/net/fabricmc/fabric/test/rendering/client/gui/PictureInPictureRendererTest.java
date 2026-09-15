@@ -16,18 +16,8 @@
 
 package net.fabricmc.fabric.test.rendering.client.gui;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.renderer.blockentity.StandingSignRenderer;
-import net.minecraft.client.renderer.state.gui.pip.GuiSignRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 
